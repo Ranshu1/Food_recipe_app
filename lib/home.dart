@@ -17,25 +17,26 @@ class _HomeState extends State<Home> {
   TextEditingController searchController = new TextEditingController();
   List reciptCatList = [
     {
-      "imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db",
-      "heading": "Chilli Food"
+      "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2s2Y5CJo8efJzKpwA1qoqD3fgIC18t_YrqA&usqp=CAU",
+      "heading": "Sweets"
     },
     {
       "imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db",
       "heading": "Chilli Food"
     },
     {
-      "imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db",
-      "heading": "Chilli Food"
+      "imgUrl": "https://thumbs.dreamstime.com/b/breakfast-bacon-eggs-pancakes-toast-delicous-home-style-crispy-coffee-orange-juice-49174170.jpg",
+      "heading": "Breakfast"
     },
     {
-      "imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db",
-      "heading": "Chilli Food"
+      "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSknCgFCqBlpSdAjPeUU1FMNKX_KZHW4dMMuaILHPjSWA&s",
+      "heading": "Starter"
     }
   ];
+  
   getRecipe(String query) async {
     String url =
-        "https://api.edamam.com/search?q=$query&app_id=d8e284f1&app_key=88a62bc45775609065bedc933b5cf057";
+        "https://api.edamam.com/search?q=$query&app_id=4126f6be&app_key=febd6fa8c57c6b93c11c4701b279c402";
     http.Response response = await http.get(Uri.parse(url));
     Map data = jsonDecode(response.body);
     log(data.toString());
@@ -65,18 +66,18 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+   return Scaffold(
       body: Stack(
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-              Color(0xff213A50),
-              Color(0xff071938),
-            ])),
-          ),
+          // Container(
+          //   width: MediaQuery.of(context).size.width,
+          //   height: MediaQuery.of(context).size.height,
+          //   decoration: BoxDecoration(
+          //       gradient: LinearGradient(colors: [
+          //     Color(0xff213A50),
+          //     Color(0xff071938),
+          //   ])),
+          // ),
           SingleChildScrollView(
             child: Column(
               children: [
@@ -89,8 +90,17 @@ class _HomeState extends State<Home> {
                         borderRadius: BorderRadius.circular(24)),
                     child: Row(
                       children: [
-                        GestureDetector(
-                            onTap: () {
+                        Container(
+                          child: Icon(
+                            Icons.search,
+                            color: Colors.blueAccent,
+                          ),
+                          margin: EdgeInsets.fromLTRB(3, 0, 7, 0),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            textInputAction: TextInputAction.done,
+                            onSubmitted: (value){
                               if ((searchController.text).replaceAll(" ", "") ==
                                   "") {
                                 print("Blank search");
@@ -102,15 +112,6 @@ class _HomeState extends State<Home> {
                                             Search(searchController.text)));
                               }
                             },
-                            child: Container(
-                              child: Icon(
-                                Icons.search,
-                                color: Colors.blueAccent,
-                              ),
-                              margin: EdgeInsets.fromLTRB(3, 0, 7, 0),
-                            )),
-                        Expanded(
-                          child: TextField(
                             controller: searchController,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
@@ -128,14 +129,14 @@ class _HomeState extends State<Home> {
                     children: [
                       Text(
                         "WHAT DO YOU WANT TO COOK TODAY?",
-                        style: TextStyle(fontSize: 33, color: Colors.white),
+                        style: TextStyle(fontSize: 33, color: Colors.black),
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       Text(
                         "Let's Cook Something New!",
-                        style: TextStyle(fontSize: 20.0, color: Colors.white),
+                        style: TextStyle(fontSize: 20.0, color: Colors.black),
                       ),
                     ],
                   ),
@@ -235,7 +236,7 @@ class _HomeState extends State<Home> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => RecipeView(
+                                    builder: (context) => Search(
                                         reciptCatList[index]["heading"])));
                           },
                           child: Card(
@@ -289,3 +290,4 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
