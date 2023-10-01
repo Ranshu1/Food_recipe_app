@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:food_recipe_app/Search.dart';
 import 'package:food_recipe_app/models.dart';
@@ -12,34 +13,50 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String randomRecipe = ""; // Initialize as an empty string
+
+  List<String> recipe_name = [
+    "Dal", "Chawal", "Chola", "Paneer", "Chap", "Pizza", "Biscuit", "Tea", "Bread", "Dhokla", "Burger", "Rice", "Soup", "Chips", "Shakes", "Poha", "Rasgulla", "Noodles", "Lasagna", "Tacos", "Sushi", "Pancakes", "Omelette", "Fried Chicken", "Spaghetti", "Beef Stroganoff", "Caesar Salad", "Cinnamon Rolls", "Guacamole", "Quiche", "Clam Chowder", "Beef and Broccoli", "Chicken Alfredo", "Miso Soup", "Cobb Salad", "Shrimp Scampi", "Potato Salad", "Beef Tacos", "Falafel", "Tiramisu", "Goulash", "Beef Wellington", "Beef Tenders", "Pasta Primavera", "Stir-Fried Vegetables", "Veggie Burrito", "Caprese Salad", "Ratatouille", "Spinach and Cheese Quesadilla", "Hummus and Pita Bread", "Margherita Pizza", "Vegetable Biryani", "Lentil Soup", "Vegetable Fried Rice", "Greek Salad", "Tofu Stir-Fry", "Eggplant Parmesan", "Chickpea Curry (Chana Masala)", "Spinach Lasagna", "Roasted Vegetable Sandwich", "Mushroom Risotto", "Sweet Potato Fries", "Broccoli Cheddar Soup"
+  ];
+  String getRandomRecipe() {
+    int randomIndex = Random().nextInt(recipe_name.length);
+    return recipe_name[randomIndex];
+  }
+
+  
+
   bool isLoading = true;
   List<RecipeModel> recipeList = <RecipeModel>[];
   TextEditingController searchController = new TextEditingController();
   List reciptCatList = [
     {
-      "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2s2Y5CJo8efJzKpwA1qoqD3fgIC18t_YrqA&usqp=CAU",
+      "imgUrl":
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2s2Y5CJo8efJzKpwA1qoqD3fgIC18t_YrqA&usqp=CAU",
       "heading": "Sweets"
     },
     {
-      "imgUrl": "https://images.unsplash.com/photo-1593560704563-f176a2eb61db",
+      "imgUrl":
+          "https://plus.unsplash.com/premium_photo-1694628644912-be7ea22360c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTF8fGNoaWxsaXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
       "heading": "Chilli Food"
     },
     {
-      "imgUrl": "https://thumbs.dreamstime.com/b/breakfast-bacon-eggs-pancakes-toast-delicous-home-style-crispy-coffee-orange-juice-49174170.jpg",
+      "imgUrl":
+          "https://thumbs.dreamstime.com/b/breakfast-bacon-eggs-pancakes-toast-delicous-home-style-crispy-coffee-orange-juice-49174170.jpg",
       "heading": "Breakfast"
     },
     {
-      "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSknCgFCqBlpSdAjPeUU1FMNKX_KZHW4dMMuaILHPjSWA&s",
+      "imgUrl":
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSknCgFCqBlpSdAjPeUU1FMNKX_KZHW4dMMuaILHPjSWA&s",
       "heading": "Starter"
     }
   ];
-  
+
   getRecipe(String query) async {
     String url =
         "https://api.edamam.com/search?q=$query&app_id=4126f6be&app_key=febd6fa8c57c6b93c11c4701b279c402";
     http.Response response = await http.get(Uri.parse(url));
     Map data = jsonDecode(response.body);
-    log(data.toString());
+    print(data.toString());
     setState(() {
       data["hits"].forEach((element) {
         RecipeModel recipeModel = new RecipeModel();
@@ -48,7 +65,7 @@ class _HomeState extends State<Home> {
         setState(() {
           isLoading = false;
         });
-        log(recipeList.toString());
+        print(recipeList.toString());
       });
     });
     recipeList.forEach((Recipe) {
@@ -61,12 +78,13 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getRecipe("Paneer");
+    randomRecipe = getRandomRecipe();
+    getRecipe(randomRecipe);
   }
 
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
+    return Scaffold(
       body: Stack(
         children: [
           // Container(
@@ -100,7 +118,7 @@ class _HomeState extends State<Home> {
                         Expanded(
                           child: TextField(
                             textInputAction: TextInputAction.done,
-                            onSubmitted: (value){
+                            onSubmitted: (value) {
                               if ((searchController.text).replaceAll(" ", "") ==
                                   "") {
                                 print("Blank search");
@@ -248,7 +266,7 @@ class _HomeState extends State<Home> {
                               child: Stack(
                                 children: [
                                   ClipRRect(
-                                      borderRadius: BorderRadius.circular(18.0),
+                                      borderRadius: BorderRadius.circular(20.0),
                                       child: Image.network(
                                         reciptCatList[index]["imgUrl"],
                                         fit: BoxFit.cover,
@@ -290,4 +308,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
